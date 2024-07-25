@@ -1,0 +1,10 @@
+# Ignore virtual environment
+chess-env/
+
+# Ignore any log files or temporary files
+*.log
+*.tmp
+
+# Ignore any other unnecessary files or directories
+__pycache__/
+.vscode/

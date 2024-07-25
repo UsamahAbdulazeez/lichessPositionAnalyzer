@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lichess Board Position</title>
+    <style>
+        body {
+            width: 300px;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+        .analysis-section {
+            display: none;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>Lichess Position</h1>
+    <button id="getPosition">Get Position</button>
+    <div id="fenDisplay">FEN will be displayed here.</div>
+    <button id="showThreats">Show Threats</button>
+    <div id="threats" class="analysis-section"></div>
+    <button id="showIdeas">Show Ideas</button>
+    <div id="ideas" class="analysis-section"></div>
+    <button id="showStrengths">Show Strengths & Weaknesses</button>
+    <div id="strengths" class="analysis-section"></div>
+    <button id="showPieces">Show Strong & Weak Pieces</button>
+    <div id="pieces" class="analysis-section"></div>
+    <button id="showGuidance">Show Strategic Guidance</button>
+    <div id="guidance" class="analysis-section"></div>
+    <script src="popup.js"></script>
+</body>
+</html>
