@@ -1,12 +1,15 @@
 from flask import Flask, request, jsonify
-from transformers import pipeline
+from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM
 import chess
 import chess.engine
 
 app = Flask(__name__)
-generator = pipeline('text-generation', model='gpt-2')
 
-# Path to Stockfish executable
+model_name = "gpt-2"
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForCausalLM.from_pretrained(model_name)
+generator = pipeline('text-generation', model=model, tokenizer=tokenizer)
+
 stockfish_path = "./stockfish-windows-x86-64/stockfish-windows-x86-64.exe"
 
 def get_stockfish_analysis(fen):
