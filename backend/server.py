@@ -1,19 +1,18 @@
 import os
-from flask import Flask, request, jsonify
-import openai
-import chess
 import chess.engine
+import openai
+from flask import Flask, request, jsonify
 from dotenv import load_dotenv
 
-# Load environment variables from .env file
 load_dotenv()
 
 app = Flask(__name__)
 
-# Get OpenAI API key from environment variable
-openai.api_key = os.getenv("OPENAI_API_KEY")
+# Path to Stockfish executable
+stockfish_path = "./backend/stockfish-windows-x86-64/stockfish-windows-x86-64.exe"
 
-stockfish_path = "./stockfish-windows-x86-64/stockfish-windows-x86-64.exe"
+# OpenAI API key
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 def get_stockfish_analysis(fen):
     with chess.engine.SimpleEngine.popen_uci(stockfish_path) as engine:
@@ -23,28 +22,31 @@ def get_stockfish_analysis(fen):
         analysis = engine.analyse(board, chess.engine.Limit(depth=20))
         return str(best_move), analysis
 
+def generate_explanation(fen, stockfish_analysis):
+    prompt = f"Analyze the chess position given the following FEN: {fen} and the analysis: {stockfish_analysis}. Provide detailed analysis and suggestions."
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": prompt}
+        ]
+    )
+    return response.choices[0].message['content'].strip()
+
 @app.route('/stockfish', methods=['POST'])
 def stockfish():
-    data = request.json
+    data = request.get_json()
     fen = data['fen']
     best_move, analysis = get_stockfish_analysis(fen)
-    return jsonify({'best_move': best_move, 'analysis': str(analysis)})
+    return jsonify({"best_move": best_move, "analysis": analysis})
 
 @app.route('/explanation', methods=['POST'])
 def explanation():
-    data = request.json
+    data = request.get_json()
     fen = data['fen']
     stockfish_analysis = data['analysis']
-    prompt = f"Given the chess position FEN {fen} and the analysis {stockfish_analysis}, provide a detailed explanation of the position."
-    
-    response = openai.Completion.create(
-        engine="text-davinci-003",
-        prompt=prompt,
-        max_tokens=150
-    )
-    explanation = response.choices[0].text.strip()
-    
-    return jsonify({'explanation': explanation})
+    explanation = generate_explanation(fen, stockfish_analysis)
+    return jsonify({"explanation": explanation})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
