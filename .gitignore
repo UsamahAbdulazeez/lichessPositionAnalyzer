@@ -8,3 +8,6 @@ chess-env/
 # Ignore any other unnecessary files or directories
 __pycache__/
 .vscode/
+
+# Ignore .env file
+.env
