@@ -1,14 +1,17 @@
+import os
 from flask import Flask, request, jsonify
-from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM
+import openai
 import chess
 import chess.engine
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 app = Flask(__name__)
 
-model_name = "gpt-2"
-tokenizer = AutoTokenizer.from_pretrained(model_name)
-model = AutoModelForCausalLM.from_pretrained(model_name)
-generator = pipeline('text-generation', model=model, tokenizer=tokenizer)
+# Get OpenAI API key from environment variable
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 stockfish_path = "./stockfish-windows-x86-64/stockfish-windows-x86-64.exe"
 
@@ -33,7 +36,14 @@ def explanation():
     fen = data['fen']
     stockfish_analysis = data['analysis']
     prompt = f"Given the chess position FEN {fen} and the analysis {stockfish_analysis}, provide a detailed explanation of the position."
-    explanation = generator(prompt, max_length=150)[0]['generated_text']
+    
+    response = openai.Completion.create(
+        engine="text-davinci-003",
+        prompt=prompt,
+        max_tokens=150
+    )
+    explanation = response.choices[0].text.strip()
+    
     return jsonify({'explanation': explanation})
 
 if __name__ == '__main__':
