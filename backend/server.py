@@ -1,30 +1,18 @@
 import os
 from flask import Flask, request, jsonify
 import openai
-import chess
-import chess.engine
 from dotenv import load_dotenv
 
 load_dotenv()
 
 app = Flask(__name__)
 
-STOCKFISH_PATH = os.getenv('STOCKFISH_PATH')
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 
+if not OPENAI_API_KEY:
+    raise ValueError("OPENAI_API_KEY environment variable is not set.")
+
 openai.api_key = OPENAI_API_KEY
-engine = chess.engine.SimpleEngine.popen_uci(STOCKFISH_PATH)
-
-@app.route('/stockfish', methods=['POST'])
-def stockfish_analysis():
-    data = request.get_json()
-    fen = data.get('fen')
-
-    board = chess.Board(fen)
-    result = engine.analyse(board, chess.engine.Limit(time=0.1))
-    best_move = result['pv'][0]
-
-    return jsonify({'best_move': best_move.uci(), 'fen': fen})
 
 @app.route('/explanation', methods=['POST'])
 def explanation():
