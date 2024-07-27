@@ -1,11 +1,14 @@
-function getBoardPosition() {
-    let fenElement = document.querySelector('input.copyable');
-    if (fenElement) {
-        let fen = fenElement.value;
-        chrome.runtime.sendMessage({ action: 'sendFen', fen: fen });
-    } else {
-        console.error('Board not found');
+function getFen() {
+    const fenInput = document.querySelector('input.copyable');
+    if (fenInput) {
+        return fenInput.value;
     }
+    return null;
 }
 
-getBoardPosition();
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.action === 'getFen') {
+        const fen = getFen();
+        sendResponse({ fen: fen });
+    }
+});

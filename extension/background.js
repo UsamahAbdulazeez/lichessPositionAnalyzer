@@ -1,17 +1,47 @@
-// background.js
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    if (message.fen) {
-        fetch('https://lichess-position-analyzer.onrender.com/stockfish', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ fen: message.fen }),
-        })
-        .then(response => response.json())
-        .then(data => {
-            chrome.runtime.sendMessage({ type: 'stockfishAnalysis', data: data });
-        })
-        .catch(error => console.error('Error:', error));
+chrome.runtime.onInstalled.addListener(() => {
+    chrome.contextMenus.create({
+        id: "getFen",
+        title: "Get FEN",
+        contexts: ["all"]
+    });
+});
+
+chrome.contextMenus.onClicked.addListener((info, tab) => {
+    if (info.menuItemId === "getFen") {
+        chrome.tabs.sendMessage(tab.id, { action: "getFen" }, (response) => {
+            if (response.fen) {
+                chrome.storage.local.set({ fen: response.fen }, () => {
+                    console.log("FEN saved: " + response.fen);
+                });
+            }
+        });
     }
 });
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.action === 'sendFen') {
+        chrome.storage.local.set({ fen: message.fen });
+    } else if (message.action === 'getExplanation') {
+        chrome.storage.local.get(['fen', 'analysis'], (result) => {
+            if (result.fen && result.analysis) {
+                fetchExplanation(result.fen, result.analysis, sendResponse);
+            }
+        });
+    }
+    return true;
+});
+
+function fetchExplanation(fen, analysis, callback) {
+    fetch('https://lichess-position-analyzer.onrender.com/explanation', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ fen: fen, analysis: analysis }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        callback(data);
+    })
+    .catch(error => console.error('Error:', error));
+}
