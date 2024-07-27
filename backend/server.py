@@ -28,20 +28,27 @@ def get_analysis_prompt(fen, analysis_type):
 
 @app.route('/analysis', methods=['POST'])
 def analysis():
-    data = request.get_json()
-    fen = data.get('fen')
-    analysis_type = data.get('analysis')
+    try:
+        data = request.get_json()
+        fen = data.get('fen')
+        analysis_type = data.get('analysis')
 
-    prompt = get_analysis_prompt(fen, analysis_type)
+        if not fen or not analysis_type:
+            return jsonify({"error": "Missing FEN or analysis type"}), 400
 
-    response = openai.Completion.create(
-        engine="davinci-codex",
-        prompt=prompt,
-        max_tokens=150
-    )
-    
-    explanation = response.choices[0].text.strip()
-    return jsonify({'explanation': explanation})
+        prompt = get_analysis_prompt(fen, analysis_type)
+
+        response = openai.Completion.create(
+            engine="davinci-codex",
+            prompt=prompt,
+            max_tokens=150
+        )
+        
+        explanation = response.choices[0].text.strip()
+        return jsonify({'explanation': explanation})
+    except Exception as e:
+        app.logger.error(f"Error during analysis: {str(e)}")
+        return jsonify({"error": "Internal Server Error"}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
