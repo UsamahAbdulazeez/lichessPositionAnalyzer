@@ -56,5 +56,9 @@ def analysis():
         app.logger.error(f"Error during analysis: {str(e)}")
         return jsonify({"error": "Internal Server Error"}), 500
 
+@app.route('/')
+def health_check():
+    return jsonify({"status": "ok"})
+
 if __name__ == '__main__':
     app.run(debug=True)
