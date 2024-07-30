@@ -16,16 +16,17 @@ if not OPENAI_API_KEY:
 openai.api_key = OPENAI_API_KEY
 
 def get_analysis_prompt(fen, analysis_type):
+    base_prompt = f"Analyze this FEN position: {fen} briefly and concisely. "
     if analysis_type == 'threats':
-        return f"Analyze this FEN position: {fen} and provide details on checks, captures, and threats."
+        return base_prompt + "Provide details on checks, captures, and threats."
     elif analysis_type == 'pieces':
-        return f"Analyze this FEN position: {fen} and provide details on weak and strong pieces."
+        return base_prompt + "Provide details on weak and strong pieces."
     elif analysis_type == 'ideas':
-        return f"Analyze this FEN position: {fen} and provide key ideas and strategies."
+        return base_prompt + "Provide key ideas and strategies."
     elif analysis_type == 'overview':
-        return f"Analyze this FEN position: {fen} and provide a general overview."
+        return base_prompt + "Provide a general overview."
     else:
-        return f"Analyze this FEN position: {fen}."
+        return base_prompt
 
 @app.route('/analysis', methods=['POST'])
 def analysis():
