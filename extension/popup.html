@@ -1,14 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>Lichess Position Analyzer</title>
+    <style>
+        body {
+            width: 300px;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+        #analysisResult {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+    </style>
 </head>
 <body>
-    <div>
-        <textarea id="analysis-input" placeholder="Enter analysis..."></textarea>
-        <button id="btn-get-explanation">Get Explanation</button>
-    </div>
-    <div id="explanation"></div>
+    <h1>Lichess Position Analyzer</h1>
+    <button id="getPosition">Get Position</button>
+    <div id="fenDisplay">FEN will be displayed here.</div>
+    <button id="btn-checks">Checks, Captures, Threats</button>
+    <button id="btn-weak-strong">Weak and Strong Pieces</button>
+    <button id="btn-key-ideas">Key Ideas and Strategies</button>
+    <button id="btn-overview">Overview</button>
+    <div id="analysisResult">Analysis result will be displayed here.</div>
     <script src="popup.js"></script>
 </body>
 </html>

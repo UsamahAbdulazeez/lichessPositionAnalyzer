@@ -5,7 +5,9 @@
     "description": "Analyze chess positions from Lichess",
     "permissions": [
         "activeTab",
-        "scripting"
+        "scripting",
+        "storage",
+        "contextMenus"
     ],
     "background": {
         "service_worker": "background.js"

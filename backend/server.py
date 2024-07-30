@@ -49,7 +49,7 @@ def analysis():
             max_tokens=150
         )
         
-        explanation = response.choices[0].message['content'].strip()
+        explanation = response['choices'][0]['message']['content'].strip()
         app.logger.info(f"Received explanation: {explanation}")
         return jsonify({'explanation': explanation})
     except Exception as e:

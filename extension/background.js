@@ -4,18 +4,18 @@ chrome.runtime.onInstalled.addListener(() => {
         title: "Get FEN",
         contexts: ["all"]
     });
-});
 
-chrome.contextMenus.onClicked.addListener((info, tab) => {
-    if (info.menuItemId === "getFen") {
-        chrome.tabs.sendMessage(tab.id, { action: "getFen" }, (response) => {
-            if (response.fen) {
-                chrome.storage.local.set({ fen: response.fen }, () => {
-                    console.log("FEN saved: " + response.fen);
-                });
-            }
-        });
-    }
+    chrome.contextMenus.onClicked.addListener((info, tab) => {
+        if (info.menuItemId === "getFen") {
+            chrome.tabs.sendMessage(tab.id, { action: "getFen" }, (response) => {
+                if (response && response.fen) {
+                    chrome.storage.local.set({ fen: response.fen }, () => {
+                        console.log("FEN saved: " + response.fen);
+                    });
+                }
+            });
+        }
+    });
 });
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -32,7 +32,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 });
 
 function fetchExplanation(fen, analysis, callback) {
-    fetch('https://lichess-position-analyzer.onrender.com/explanation', {
+    fetch('https://lichess-position-analyzer.onrender.com/analysis', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
