@@ -10,6 +10,7 @@ app = Flask(__name__)
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 
 if not OPENAI_API_KEY:
+    app.logger.error("OPENAI_API_KEY environment variable is not set.")
     raise ValueError("OPENAI_API_KEY environment variable is not set.")
 
 openai.api_key = OPENAI_API_KEY
@@ -35,21 +36,19 @@ def analysis():
         analysis_type = data.get('analysis')
 
         if not fen or not analysis_type:
+            app.logger.error("Missing FEN or analysis type")
             return jsonify({"error": "Missing FEN or analysis type"}), 400
 
         prompt = get_analysis_prompt(fen, analysis_type)
         app.logger.info(f"Generated prompt: {prompt}")
 
-        response = openai.ChatCompletion.create(
+        response = openai.Completion.create(
             model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": "You are a helpful chess assistant."},
-                {"role": "user", "content": prompt}
-            ],
+            prompt=prompt,
             max_tokens=150
         )
         
-        explanation = response['choices'][0]['message']['content'].strip()
+        explanation = response['choices'][0]['text'].strip()
         app.logger.info(f"Received explanation: {explanation}")
         return jsonify({'explanation': explanation})
     except Exception as e:
@@ -61,4 +60,4 @@ def health_check():
     return jsonify({"status": "ok"})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=10000)
