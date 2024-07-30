@@ -1,5 +1,6 @@
 flask
-openai==0.28
+openai==0.28.0
 chess
 gunicorn
 python-dotenv
+flask-cors
