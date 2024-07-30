@@ -42,17 +42,21 @@ def analysis():
         prompt = get_analysis_prompt(fen, analysis_type)
         app.logger.info(f"Generated prompt: {prompt}")
 
-        response = openai.Completion.create(
+        response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
-            prompt=prompt,
+            messages=[
+                {"role": "system", "content": "You are a helpful chess assistant."},
+                {"role": "user", "content": prompt}
+            ],
             max_tokens=150
         )
         
-        explanation = response['choices'][0]['text'].strip()
+        app.logger.info(f"OpenAI response: {response}")
+        explanation = response['choices'][0]['message']['content'].strip()
         app.logger.info(f"Received explanation: {explanation}")
         return jsonify({'explanation': explanation})
     except Exception as e:
-        app.logger.error(f"Error during analysis: {str(e)}")
+        app.logger.error(f"Error during analysis: {str(e)}", exc_info=True)
         return jsonify({"error": "Internal Server Error"}), 500
 
 @app.route('/')
