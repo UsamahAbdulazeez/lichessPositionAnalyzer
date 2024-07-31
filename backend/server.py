@@ -22,6 +22,10 @@ ANALYSIS_PROMPTS = {
 def home():
     return "Chess Analysis Server is running!", 200
 
+@app.route('/health')
+def health():
+    return jsonify({"status": "healthy"}), 200
+
 @app.route('/analysis', methods=['POST'])
 def analysis():
     try:
@@ -32,7 +36,10 @@ def analysis():
         if not fen or not analysis_type:
             return jsonify({"error": "Missing FEN or analysis type"}), 400
 
-        prompt = ANALYSIS_PROMPTS.get(analysis_type, "Analyze this chess position. Be concise. FEN: ") + fen
+        if analysis_type not in ANALYSIS_PROMPTS:
+            return jsonify({"error": "Invalid analysis type"}), 400
+
+        prompt = ANALYSIS_PROMPTS[analysis_type] + fen
 
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
@@ -44,8 +51,10 @@ def analysis():
         )
         explanation = response['choices'][0]['message']['content'].strip()
         return jsonify({'explanation': explanation})
+    except openai.error.OpenAIError as e:
+        return jsonify({"error": f"OpenAI API error: {str(e)}"}), 500
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return jsonify({"error": f"Unexpected error: {str(e)}"}), 500
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
