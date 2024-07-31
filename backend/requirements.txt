@@ -1,6 +1,4 @@
-flask
+Flask==2.0.1
 openai==0.28.0
-chess
-gunicorn
-python-dotenv
-flask-cors
+gunicorn==20.1.0
+flask-cors==3.0.10
