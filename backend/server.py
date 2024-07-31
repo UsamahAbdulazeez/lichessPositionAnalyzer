@@ -18,6 +18,10 @@ ANALYSIS_PROMPTS = {
     'key_ideas_strategies': "Analyze the following chess position in FEN notation. Suggest key ideas and strategies for both sides. Be very concise and to the point. FEN: "
 }
 
+@app.route('/')
+def home():
+    return "Chess Analysis Server is running!", 200
+
 @app.route('/analysis', methods=['POST'])
 def analysis():
     try:
@@ -43,9 +47,6 @@ def analysis():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@app.route('/health')
-def health_check():
-    return "", 200
-
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
