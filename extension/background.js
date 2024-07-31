@@ -12,6 +12,8 @@ chrome.runtime.onInstalled.addListener(() => {
                     chrome.storage.local.set({ fen: response.fen }, () => {
                         console.log("FEN saved: " + response.fen);
                     });
+                } else {
+                    console.error('Failed to retrieve FEN from content script');
                 }
             });
         }
@@ -25,6 +27,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         chrome.storage.local.get(['fen', 'analysis'], (result) => {
             if (result.fen && result.analysis) {
                 fetchExplanation(result.fen, result.analysis, sendResponse);
+            } else {
+                console.error('FEN or analysis type not found in storage');
             }
         });
     }
@@ -44,7 +48,7 @@ function fetchExplanation(fen, analysis, callback) {
         callback(data);
     })
     .catch(error => {
-        console.error('Error:', error);
+        console.error('Error fetching explanation:', error);
         callback({ error: 'Failed to fetch analysis' });
     });
 }

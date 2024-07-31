@@ -10,6 +10,7 @@ document.getElementById('getPosition').addEventListener('click', function() {
                     chrome.storage.local.set({ fen: response.fen });
                 } else {
                     document.getElementById('fenDisplay').innerText = 'Failed to get FEN';
+                    console.error('Failed to get FEN from content script');
                 }
             });
         });
@@ -36,6 +37,7 @@ function performAnalysis(type) {
             fetchAnalysis(type, result.fen);
         } else {
             document.getElementById('analysisResult').innerText = 'FEN not available';
+            console.error('FEN not available in storage');
         }
     });
 }

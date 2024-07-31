@@ -22,7 +22,6 @@ def analyze_fen():
     if not analysis_type:
         return jsonify({'error': 'Analysis type not provided'}), 400
 
-    # Implement analysis using OpenAI
     prompt = f"Analyze the following FEN ({analysis_type}): {fen}"
     try:
         response = openai.Completion.create(
