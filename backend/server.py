@@ -1,58 +1,41 @@
+import os
+import openai
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import openai
-import os
 from dotenv import load_dotenv
 
 load_dotenv()
 
+openai.api_key = os.getenv('OPENAI_API_KEY')
+
 app = Flask(__name__)
-CORS(app, resources={r"/analysis": {"origins": "*"}})
-
-OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
-
-if not OPENAI_API_KEY:
-    raise ValueError("OPENAI_API_KEY environment variable is not set.")
-
-openai.api_key = OPENAI_API_KEY
-
-def get_analysis_prompt(fen, analysis_type):
-    if analysis_type == 'threats':
-        return f"Analyze this FEN position: {fen} and provide details on checks, captures, and threats."
-    elif analysis_type == 'pieces':
-        return f"Analyze this FEN position: {fen} and provide details on weak and strong pieces."
-    elif analysis_type == 'ideas':
-        return f"Analyze this FEN position: {fen} and provide key ideas and strategies."
-    elif analysis_type == 'overview':
-        return f"Analyze this FEN position: {fen} and provide a general overview."
-    else:
-        return f"Analyze this FEN position: {fen}."
+CORS(app)
 
 @app.route('/analysis', methods=['POST'])
-def analysis():
+def analyze_fen():
+    data = request.json
+    fen = data.get('fen')
+    analysis_type = data.get('analysis')
+
+    if not fen:
+        return jsonify({'error': 'FEN not provided'}), 400
+    if not analysis_type:
+        return jsonify({'error': 'Analysis type not provided'}), 400
+
+    # Implement analysis using OpenAI
+    prompt = f"Analyze the following FEN ({analysis_type}): {fen}"
     try:
-        data = request.get_json()
-        fen = data.get('fen')
-        analysis_type = data.get('analysis')
-
-        if not fen or not analysis_type:
-            return jsonify({"error": "Missing FEN or analysis type"}), 400
-
-        prompt = get_analysis_prompt(fen, analysis_type)
-
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": "You are a helpful chess assistant."},
-                {"role": "user", "content": prompt}
-            ],
-            max_tokens=150
+        response = openai.Completion.create(
+            model="text-davinci-003",
+            prompt=prompt,
+            max_tokens=150,
+            temperature=0.5
         )
-        
-        explanation = response.choices[0].message['content'].strip()
-        return jsonify({'explanation': explanation})
+        explanation = response.choices[0].text.strip()
     except Exception as e:
-        return jsonify({"error": "Internal Server Error"}), 500
+        return jsonify({'error': str(e)}), 500
+
+    return jsonify({'explanation': explanation})
 
 if __name__ == '__main__':
     app.run(debug=True)
