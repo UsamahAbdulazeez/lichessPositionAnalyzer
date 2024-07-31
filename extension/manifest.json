@@ -5,13 +5,11 @@
     "description": "Analyze chess positions from Lichess",
     "permissions": [
         "activeTab",
-        "scripting",
-        "storage",
-        "contextMenus"
+        "storage"
     ],
-    "background": {
-        "service_worker": "background.js"
-    },
+    "host_permissions": [
+        "https://lichess-position-analyzer.onrender.com/*"
+    ],
     "action": {
         "default_popup": "popup.html",
         "default_icon": {
@@ -25,5 +23,8 @@
             "matches": ["https://lichess.org/*"],
             "js": ["content.js"]
         }
-    ]
+    ],
+    "background": {
+        "service_worker": "background.js"
+    }
 }

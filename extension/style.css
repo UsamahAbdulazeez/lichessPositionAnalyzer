@@ -1,61 +1,49 @@
-body {
+body, html {
+    width: 400px;
+    height: 500px;
     margin: 0;
     padding: 0;
     font-family: 'Arial', sans-serif;
-    background: transparent;
+    background: #2c3e50;
     color: #ecf0f1;
-    display: flex;
-    justify-content: flex-end;
-    align-items: flex-start;
-    height: 100vh;
-    width: 100vw;
-    padding: 10px;
-    overflow: hidden;
 }
 
 .container {
-    width: 400px;
-    background: #2c3e50;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    border-radius: 12px;
+    width: 100%;
+    height: 100%;
     padding: 20px;
-    text-align: center;
-    position: fixed;  /* Changed from absolute to fixed */
-    top: 50px;  /* Adjust the position as needed */
-    right: 20px;
-    cursor: move;
-    z-index: 1000;  /* Ensure it stays above other elements */
+    box-sizing: border-box;
 }
 
 .title {
     font-size: 1.5em;
     margin-bottom: 20px;
     color: #ecf0f1;
+    text-align: center;
 }
 
 .btn {
-    display: inline-block;
-    width: 48%;
+    display: block;
+    width: 100%;
     padding: 10px;
-    margin: 10px 1%;
+    margin: 10px 0;
     background: #3498db;
     color: #fff;
     border: none;
     border-radius: 8px;
     cursor: pointer;
     font-size: 1em;
-    transition: background 0.3s ease, transform 0.3s ease;
+    transition: background 0.3s ease;
 }
 
 .btn:hover {
     background: #2980b9;
-    transform: translateY(-2px);
 }
 
 .fen-display {
     margin: 10px 0;
     padding: 10px;
-    background: #3b4a59;
+    background: #34495e;
     border: 1px solid #7f8c8d;
     border-radius: 8px;
     font-family: monospace;
@@ -66,11 +54,11 @@ body {
 .analysis-result {
     margin-top: 20px;
     padding: 10px;
-    background: #3b4a59;
+    background: #34495e;
     border: 1px solid #7f8c8d;
     border-radius: 8px;
     font-family: monospace;
-    height: 100px;
+    height: 150px;
     overflow-y: auto;
     color: #ecf0f1;
 }
