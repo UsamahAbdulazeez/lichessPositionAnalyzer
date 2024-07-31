@@ -43,5 +43,8 @@ function fetchExplanation(fen, analysis, callback) {
     .then(data => {
         callback(data);
     })
-    .catch(error => console.error('Error:', error));
+    .catch(error => {
+        console.error('Error:', error);
+        callback({ error: 'Failed to fetch analysis' });
+    });
 }

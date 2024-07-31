@@ -5,16 +5,46 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
+    <div class="container" id="draggable">
         <h1 class="title">Lichess Position Analyzer</h1>
         <button id="getPosition" class="btn">Get Position</button>
         <div id="fenDisplay" class="fen-display">FEN will be displayed here.</div>
-        <button id="btn-checks" class="btn">Checks, Captures, Threats</button>
-        <button id="btn-weak-strong" class="btn">Weak and Strong Pieces</button>
-        <button id="btn-key-ideas" class="btn">Key Ideas and Strategies</button>
-        <button id="btn-overview" class="btn">Overview</button>
+        <div class="btn-group">
+            <button id="btn-checks" class="btn">Checks, Captures, Threats</button>
+            <button id="btn-weak-strong" class="btn">Weak and Strong Pieces</button>
+            <button id="btn-key-ideas" class="btn">Key Ideas and Strategies</button>
+            <button id="btn-overview" class="btn">Overview</button>
+        </div>
         <div id="analysisResult" class="analysis-result">Analysis result will be displayed here.</div>
     </div>
     <script src="popup.js"></script>
+    <script>
+        const draggable = document.getElementById("draggable");
+
+        draggable.onmousedown = function(event) {
+            let shiftX = event.clientX - draggable.getBoundingClientRect().left;
+            let shiftY = event.clientY - draggable.getBoundingClientRect().top;
+
+            function moveAt(pageX, pageY) {
+                draggable.style.left = pageX - shiftX + 'px';
+                draggable.style.top = pageY - shiftY + 'px';
+            }
+
+            function onMouseMove(event) {
+                moveAt(event.pageX, event.pageY);
+            }
+
+            document.addEventListener('mousemove', onMouseMove);
+
+            draggable.onmouseup = function() {
+                document.removeEventListener('mousemove', onMouseMove);
+                draggable.onmouseup = null;
+            };
+        };
+
+        draggable.ondragstart = function() {
+            return false;
+        };
+    </script>
 </body>
 </html>
