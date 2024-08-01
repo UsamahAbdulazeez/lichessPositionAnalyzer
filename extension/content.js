@@ -1,31 +1,44 @@
 function getFen() {
-    // Try to get FEN from the copyable input
-    let fenInput = document.querySelector('input.copyable[spellcheck="false"]');
-    if (fenInput && fenInput.value) {
-        return fenInput.value;
+    const fenInputElement = document.querySelector('input.copyable[spellcheck="false"]');
+
+    if (!fenInputElement) {
+        console.error('Error: FEN input element not found');
+        return null;
     }
 
-    // If not found, try to get FEN from the URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const fenFromUrl = urlParams.get('fen');
-    if (fenFromUrl) {
-        return fenFromUrl;
+    const fenValue = fenInputElement.value.trim();
+
+    if (fenValue === '') {
+        console.error('Error: FEN input value is empty');
+        return null;
     }
 
-    // If still not found, try to get it from the last move's data attribute
-    const lastMove = document.querySelector('.last-move');
-    if (lastMove) {
-        return lastMove.getAttribute('data-fen');
+    return fenValue;
+}
+
+function getPgn() {
+    const pgnElement = document.querySelector('textarea.copyable[spellcheck="false"]');
+
+    if (!pgnElement) {
+        console.error('Error: PGN element not found');
+        return null;
     }
 
-    return null;
+    const pgnValue = pgnElement.value.trim();
+
+    if (pgnValue === '') {
+        console.error('Error: PGN value is empty');
+        return null;
+    }
+
+    return pgnValue;
 }
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === 'getFen') {
         const fen = getFen();
-        console.log("FEN found:", fen); // Add this for debugging
-        sendResponse({ fen: fen });
+        const pgn = getPgn();
+        sendResponse({ fen: fen, pgn: pgn });
     }
     return true; // Keeps the message channel open for asynchronous response
 });

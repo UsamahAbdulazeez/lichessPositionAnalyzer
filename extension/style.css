@@ -1,5 +1,5 @@
 body, html {
-    width: 400px;
+    width: 300px;  /* Adjust this width to make it thinner */
     height: 500px;
     margin: 0;
     padding: 0;
@@ -40,7 +40,7 @@ body, html {
     background: #2980b9;
 }
 
-.fen-display {
+.fen-display, .pgn-display {
     margin: 10px 0;
     padding: 10px;
     background: #34495e;

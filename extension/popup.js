@@ -8,6 +8,7 @@ document.getElementById('getPosition').addEventListener('click', function() {
             }
             if (response && response.fen) {
                 document.getElementById('fenDisplay').innerText = 'FEN: ' + response.fen;
+                document.getElementById('pgnDisplay').innerText = 'PGN: ' + response.pgn;  // Display PGN
                 chrome.storage.local.set({ fen: response.fen });
             } else {
                 document.getElementById('fenDisplay').innerText = 'Failed to get FEN';
