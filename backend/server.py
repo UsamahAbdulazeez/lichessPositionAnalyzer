@@ -13,9 +13,9 @@ if not OPENAI_API_KEY:
 openai.api_key = OPENAI_API_KEY
 
 ANALYSIS_PROMPTS = {
-    'checks_captures_threats': "Analyze the following chess position in FEN notation. Focus only on immediate checks, captures, and threats. Be very concise and to the point. FEN: ",
-    'weak_strong_pieces': "Analyze the following chess position in FEN notation. Identify weak and strong pieces for both sides. Be very concise and to the point. FEN: ",
-    'key_ideas_strategies': "Analyze the following chess position in FEN notation. Suggest key ideas and strategies for both sides. Be very concise and to the point. FEN: "
+    'checks_captures_threats': "Analyze the following chess position. Focus on immediate checks, captures, and threats. Be concise and to the point. FEN: {fen}. PGN: {pgn}.",
+    'weak_strong_pieces': "Analyze the following chess position. Identify weak and strong pieces for both sides. Be concise and to the point. FEN: {fen}. PGN: {pgn}.",
+    'key_ideas_strategies': "Analyze the following chess position. Suggest key ideas and strategies for both sides. Be concise and to the point. FEN: {fen}. PGN: {pgn}."
 }
 
 @app.route('/')
@@ -31,15 +31,16 @@ def analysis():
     try:
         data = request.get_json()
         fen = data.get('fen')
+        pgn = data.get('pgn')
         analysis_type = data.get('analysis')
 
-        if not fen or not analysis_type:
-            return jsonify({"error": "Missing FEN or analysis type"}), 400
+        if not fen or not pgn or not analysis_type:
+            return jsonify({"error": "Missing FEN, PGN, or analysis type"}), 400
 
         if analysis_type not in ANALYSIS_PROMPTS:
             return jsonify({"error": "Invalid analysis type"}), 400
 
-        prompt = ANALYSIS_PROMPTS[analysis_type] + fen
+        prompt = ANALYSIS_PROMPTS[analysis_type].format(fen=fen, pgn=pgn)
 
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",

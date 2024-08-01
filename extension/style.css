@@ -1,5 +1,5 @@
 body, html {
-    width: 300px;  /* Adjust this width to make it thinner */
+    width: 320px; /* Increased width */
     height: 500px;
     margin: 0;
     padding: 0;
@@ -61,4 +61,5 @@ body, html {
     height: 150px;
     overflow-y: auto;
     color: #ecf0f1;
+    margin-bottom: 20px; /* Added margin-bottom */
 }
