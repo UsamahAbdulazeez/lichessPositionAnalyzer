@@ -13,9 +13,12 @@ if not OPENAI_API_KEY:
 openai.api_key = OPENAI_API_KEY
 
 ANALYSIS_PROMPTS = {
-    'checks_captures_threats': "Analyze the following chess position. Focus on immediate checks, captures, and threats. Be concise and to the point. FEN: {fen}. PGN: {pgn}.",
-    'weak_strong_pieces': "Analyze the following chess position. Identify weak and strong pieces for both sides. Be concise and to the point. FEN: {fen}. PGN: {pgn}.",
-    'key_ideas_strategies': "Analyze the following chess position. Suggest key ideas and strategies for both sides. Be concise and to the point. FEN: {fen}. PGN: {pgn}."
+    'tactical': "Briefly analyze the chess position. Focus on the most critical: 1) Check or capture. 2) Immediate threat. Consider recent moves. Be very concise. FEN: {fen}. PGN: {pgn}",
+    'positional': "Briefly analyze the chess position. Identify the most significant: 1) Strong or weak piece. 2) Pawn structure issue. Consider recent moves. Be very concise. FEN: {fen}. PGN: {pgn}",
+    'material': "Briefly analyze the chess position. Note: 1) Material count. 2) Most important imbalance. Consider recent exchanges. Be very concise. FEN: {fen}. PGN: {pgn}",
+    'strategic': "Briefly analyze the chess position. Suggest: 1) Key idea for each side. 2) One potential plan. Consider the game progression. Be very concise. FEN: {fen}. PGN: {pgn}",
+    'dynamic': "Briefly analyze the chess position. Comment on: 1) Who has the initiative. 2) Most uncoordinated piece. Consider recent tempo gains/losses. Be very concise. FEN: {fen}. PGN: {pgn}",
+    'summary': "Provide a brief summary of the chess position. Include: 1) Overall assessment. 2) Most critical move or plan. Consider the game context. Be very concise. FEN: {fen}. PGN: {pgn}"
 }
 
 @app.route('/')
@@ -45,7 +48,7 @@ def analysis():
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "You are a chess analyst providing brief, focused analyses."},
+                {"role": "system", "content": "You are a chess analyst providing extremely brief, focused analyses. Use at most two short sentences per point. Refer to specific moves from the PGN only if critically relevant."},
                 {"role": "user", "content": prompt}
             ],
             max_tokens=150

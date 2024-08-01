@@ -1,6 +1,6 @@
 body, html {
-    width: 320px;
-    height: 500px;
+    width: 350px;
+    height: 600px;
     margin: 0;
     padding: 0;
     font-family: 'Arial', sans-serif;
@@ -51,14 +51,19 @@ button:hover {
     word-wrap: break-word;
 }
 
-.analysis-result {
+.analysis-container {
     flex-grow: 1;
-    padding: 10px;
+    min-height: 100px;
+    max-height: 200px;
+    overflow-y: auto;
     background: #34495e;
     border: 1px solid #7f8c8d;
     border-radius: 4px;
+}
+
+.analysis-result {
+    padding: 10px;
     font-family: monospace;
-    overflow-y: auto;
     color: #ecf0f1;
     white-space: pre-wrap;
     word-break: break-word;

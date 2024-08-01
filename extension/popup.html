@@ -6,18 +6,23 @@
 </head>
 <body>
     <div class="container">
-        <h1 id="lichess-position-analyzer" class="title">Lichess Position Analyzer</h1>
+        <h1 class="title">Lichess Position Analyzer</h1>
 
         <button id="getPosition">Get Position</button>
 
         <div id="fenDisplay" class="display-box">FEN will be displayed here.</div>
         <div id="pgnDisplay" class="display-box">PGN will be displayed here.</div>
 
-        <button id="btn-checks">Checks, Captures, Threats</button>
-        <button id="btn-weak-strong">Weak and Strong Pieces</button>
-        <button id="btn-key-ideas">Key Ideas and Strategies</button>
+        <button id="btn-tactical">Tactical Analysis</button>
+        <button id="btn-positional">Positional Analysis</button>
+        <button id="btn-material">Material Analysis</button>
+        <button id="btn-strategic">Strategic Analysis</button>
+        <button id="btn-dynamic">Dynamic Factors</button>
+        <button id="btn-summary">Evaluation Summary</button>
 
-        <div id="analysisResult" class="analysis-result">Analysis result will be displayed here.</div>
+        <div class="analysis-container">
+            <div id="analysisResult" class="analysis-result">Analysis result will be displayed here.</div>
+        </div>
     </div>
     <script src="popup.js"></script>
 </body>
