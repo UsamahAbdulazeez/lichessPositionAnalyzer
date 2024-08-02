@@ -29,11 +29,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function performAnalysis(type) {
         chrome.storage.local.get(['fen', 'pgn'], (result) => {
-            if (result.fen) {
+            if (result.fen && result.pgn) {
                 document.getElementById('analysisResult').innerText = 'Analyzing...';
                 fetchAnalysis(type, result.fen, result.pgn);
             } else {
-                document.getElementById('analysisResult').innerText = 'FEN not available. Please get position first.';
+                document.getElementById('analysisResult').innerText = 'FEN or PGN not available. Please get position first.';
             }
         });
     }

@@ -17,8 +17,9 @@
         }
     },
     "permissions": [
+        "storage",
         "activeTab",
-        "storage"
+        "https://lichess-position-analyzer.onrender.com/*"
     ],
     "host_permissions": [
         "https://lichess-position-analyzer.onrender.com/*"

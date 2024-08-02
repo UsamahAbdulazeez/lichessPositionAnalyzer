@@ -4,7 +4,7 @@ from flask_cors import CORS
 import openai
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/analysis": {"origins": "*"}})
 
 OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
 if not OPENAI_API_KEY:
@@ -46,7 +46,7 @@ def analysis():
             return jsonify({"error": "Missing analysis type"}), 400
 
         if analysis_type not in ANALYSIS_PROMPTS:
-            return jsonify({"error": f"Invalid analysis type: {analysis_type}"}), 400
+            return jsonify({"error": f"Invalid analysis type: {analysis_type}. Valid types are: {', '.join(ANALYSIS_PROMPTS.keys())}"}), 400
 
         prompt = ANALYSIS_PROMPTS[analysis_type].format(fen=fen, pgn=pgn)
         print(f"Generated prompt: {prompt}")  # Log the generated prompt
