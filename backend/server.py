@@ -33,17 +33,23 @@ def health():
 def analysis():
     try:
         data = request.get_json()
+        print(f"Received data: {data}")  # Log received data
         fen = data.get('fen')
         pgn = data.get('pgn')
         analysis_type = data.get('analysis')
 
-        if not fen or not pgn or not analysis_type:
-            return jsonify({"error": "Missing FEN, PGN, or analysis type"}), 400
+        if not fen:
+            return jsonify({"error": "Missing FEN"}), 400
+        if not pgn:
+            return jsonify({"error": "Missing PGN"}), 400
+        if not analysis_type:
+            return jsonify({"error": "Missing analysis type"}), 400
 
         if analysis_type not in ANALYSIS_PROMPTS:
-            return jsonify({"error": "Invalid analysis type"}), 400
+            return jsonify({"error": f"Invalid analysis type: {analysis_type}"}), 400
 
         prompt = ANALYSIS_PROMPTS[analysis_type].format(fen=fen, pgn=pgn)
+        print(f"Generated prompt: {prompt}")  # Log the generated prompt
 
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
@@ -56,8 +62,10 @@ def analysis():
         explanation = response['choices'][0]['message']['content'].strip()
         return jsonify({'explanation': explanation})
     except openai.error.OpenAIError as e:
+        print(f"OpenAI API error: {str(e)}")  # Log OpenAI errors
         return jsonify({"error": f"OpenAI API error: {str(e)}"}), 500
     except Exception as e:
+        print(f"Unexpected error: {str(e)}")  # Log unexpected errors
         return jsonify({"error": f"Unexpected error: {str(e)}"}), 500
 
 if __name__ == '__main__':

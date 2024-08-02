@@ -4,6 +4,7 @@ chrome.runtime.onInstalled.addListener(() => {
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === 'fetchAnalysis') {
+        console.log('Sending request:', request);  // Log the outgoing request
         fetch(request.url, {
             method: 'POST',
             headers: {
@@ -11,9 +12,20 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             },
             body: JSON.stringify(request.data)
         })
-        .then(response => response.json())
-        .then(data => sendResponse({success: true, data: data}))
-        .catch(error => sendResponse({success: false, error: error.toString()}));
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Received data:', data);  // Log the received data
+            sendResponse({success: true, data: data});
+        })
+        .catch(error => {
+            console.error('Fetch error:', error);  // Log any errors
+            sendResponse({success: false, error: error.toString()});
+        });
         return true;  // Will respond asynchronously
     }
 });
