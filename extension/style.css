@@ -68,3 +68,44 @@ button:hover {
     white-space: pre-wrap;
     word-break: break-word;
 }
+
+/* Tooltip Styles */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.tooltip:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: #fff;
+    padding: 5px;
+    border-radius: 4px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    font-size: 0.9em;
+    z-index: 100;
+    max-width: 300px;  /* Set max-width to avoid text cut off */
+    white-space: normal;  /* Allow text to wrap */
+    text-align: center;  /* Center align text */
+    opacity: 1;
+    visibility: visible;
+}
+
+.tooltip:hover::before {
+    content: '';
+    position: absolute;
+    bottom: calc(100% - 5px);
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent #333 transparent;
+    z-index: 100;
+    opacity: 1;
+    visibility: visible;
+}

@@ -17,12 +17,10 @@ STOCKFISH_API_URL = "https://stockfish.online/api/s/v2.php"
 STOCKFISH_DEPTH = 15  # You can adjust the depth as needed
 
 ANALYSIS_PROMPTS = {
-    'tactical': "Briefly analyze the chess position. Focus on the most critical: 1) Check or capture. 2) Immediate threat. Consider recent moves. Be very concise. FEN: {fen}. PGN: {pgn}. Engine Analysis: {engine_analysis}",
-    'positional': "Briefly analyze the chess position. Identify the most significant: 1) Strong or weak piece. 2) Pawn structure issue. Consider recent moves. Be very concise. FEN: {fen}. PGN: {pgn}. Engine Analysis: {engine_analysis}",
-    'material': "Briefly analyze the chess position. Note: 1) Material count. 2) Most important imbalance. Consider recent exchanges. Be very concise. FEN: {fen}. PGN: {pgn}. Engine Analysis: {engine_analysis}",
-    'strategic': "Briefly analyze the chess position. Suggest: 1) Key idea for each side. 2) One potential plan. Consider the game progression. Be very concise. FEN: {fen}. PGN: {pgn}. Engine Analysis: {engine_analysis}",
-    'dynamic': "Briefly analyze the chess position. Comment on: 1) Who has the initiative. 2) Most uncoordinated piece. Consider recent tempo gains/losses. Be very concise. FEN: {fen}. PGN: {pgn}. Engine Analysis: {engine_analysis}",
-    'summary': "Provide a brief summary of the chess position. Include: 1) Overall assessment. 2) Most critical move or plan. Consider the game context. Be very concise. FEN: {fen}. PGN: {pgn}. Engine Analysis: {engine_analysis}"
+    'tactical': "Analyze the chess position with a focus on immediate tactics, including checks, captures, and threats. Be concise. FEN: {fen}. PGN: {pgn}. Engine Analysis: {engine_analysis}",
+    'positional': "Analyze the chess position with a focus on long-term factors like piece activity, pawn structure, and strong or weak squares. Be concise. FEN: {fen}. PGN: {pgn}. Engine Analysis: {engine_analysis}",
+    'material': "Analyze the chess position with a focus on material balance, key imbalances, and any potential winning advantages. Be concise. FEN: {fen}. PGN: {pgn}. Engine Analysis: {engine_analysis}",
+    'strategic': "Provide an overall strategic assessment of the chess position, including the key ideas and potential plans for both sides. Be concise. FEN: {fen}. PGN: {pgn}. Engine Analysis: {engine_analysis}"
 }
 
 @app.route('/')
@@ -72,7 +70,7 @@ def analysis():
         prompt = ANALYSIS_PROMPTS[analysis_type].format(fen=fen, pgn=pgn, engine_analysis=engine_analysis)
 
         response = openai.ChatCompletion.create(
-            model="gpt-4",  # Switching to GPT-4 for more advanced analysis
+            model="gpt-4",  # Using GPT-4 for advanced analysis
             messages=[
                 {"role": "system", "content": "You are a chess analyst providing extremely brief, focused analyses. Use at most two short sentences per point. Refer to specific moves from the PGN only if critically relevant."},
                 {"role": "user", "content": prompt}

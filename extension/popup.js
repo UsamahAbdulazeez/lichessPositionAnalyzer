@@ -5,8 +5,6 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('btn-positional').addEventListener('click', () => performAnalysis('positional'));
     document.getElementById('btn-material').addEventListener('click', () => performAnalysis('material'));
     document.getElementById('btn-strategic').addEventListener('click', () => performAnalysis('strategic'));
-    document.getElementById('btn-dynamic').addEventListener('click', () => performAnalysis('dynamic'));
-    document.getElementById('btn-summary').addEventListener('click', () => performAnalysis('summary'));
 
     function getPosition() {
         chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
