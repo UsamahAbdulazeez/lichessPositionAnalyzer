@@ -1,21 +1,21 @@
 # Lichess Position Analyzer
 
+![Lichess Position Analyzer](images/image.png)
+
 ## Overview
 
-**Lichess Position Analyzer** is a Chrome extension designed to enhance your chess experience on Lichess by allowing you to extract and analyze positions directly from the analysis board. This extension provides users with tactical, positional, material, and strategic analyses of their chess games using a server-side engine and LLMs.
+**Lichess Position Analyzer** is a Chrome extension that enhances your chess experience on Lichess by allowing you to extract and analyze positions directly from the analysis board. The extension provides tactical, positional, material, and strategic analyses using a server-side engine, LLMs, and Stockfish online.
 
 ## Features
 
 - **Extract FEN & PGN:** Capture and display the current FEN and PGN strings from the Lichess analysis board.
-- **Comprehensive Analysis:** Perform tactical, positional, material, and strategic analyses based on the extracted positions.
+- **Comprehensive Analysis:** Perform tactical, positional, material, and strategic analyses using Stockfish online and LLMs based on the extracted positions.
 - **Interactive Interface:** User-friendly interface with tooltips explaining each analysis type.
 
 ## Technologies Used
 
-- **Frontend:** JavaScript, HTML, CSS
-- **Backend:** Python, Flask, OpenAI API, hosted on Render
-- **Chrome Extension APIs:** Service Workers, Content Scripts, Storage API
-- **Server:** Gunicorn
+- **Frontend:** JavaScript, HTML, CSS, Chrome Extension APIs
+- **Backend:** Python, Flask, OpenAI API, Stockfish online (hosted on Render)
 
 ## Screenshots and Descriptions
 
@@ -31,8 +31,8 @@
 
 ### Performing Tactical Analysis
 
-![Performing the Analysis](images/analysis.gif)
-*The extension provides a detailed tactical analysis based on the current chess position.*
+![Performing Tactical Analysis](images/analysis.gif)
+*The extension provides a detailed tactical analysis based on the current chess position using Stockfish online.*
 
 ## Setup and Installation
 
@@ -41,7 +41,6 @@
 - Python 3.x
 - Flask
 - OpenAI Python package
-- Gunicorn
 
 ### Installation
 
@@ -59,7 +58,15 @@
     pip install -r requirements.txt
     ```
 
-3. **Run the server**:
+3. **Add your OpenAI API key**:
+
+    Replace the placeholder in the `.env` file with your actual OpenAI API key.
+
+    ```env
+    OPENAI_API_KEY=your-openai-api-key
+    ```
+
+4. **Run the server**:
 
     ```sh
     python server.py
@@ -80,7 +87,7 @@
     - Extract the FEN and PGN by clicking "Get Position"
     - Choose an analysis type (Tactical, Positional, Material, or Strategic) to get the analysis results
 
-### Project Structure
+## Project Structure
 
 ```bash
 lichess_position_analyzer/
@@ -88,7 +95,7 @@ lichess_position_analyzer/
 │   ├── .env                   # Environment variables
 │   ├── Procfile               # Gunicorn configuration
 │   ├── requirements.txt       # Backend dependencies
-│   ├── server.py              # Main server file
+│   ├── server.py              # Main backend file
 │
 └── extension/
     ├── icons/
@@ -103,5 +110,5 @@ lichess_position_analyzer/
     ├── style.css              # Styling for the extension
     └── images/
         ├── get-fen.gif        # GIF showing the extraction of FEN and PGN
-        ├── analysis.gif        # GIF showing tactical analysis
+        ├── analysis.gif       # GIF showing tactical analysis
         └── image.png          # General image for the README
