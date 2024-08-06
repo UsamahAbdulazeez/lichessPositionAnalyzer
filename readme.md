@@ -1,7 +1,5 @@
 # Lichess Position Analyzer
 
-![Lichess Position Analyzer](images/image.png)
-
 ## Overview
 
 **Lichess Position Analyzer** is a Chrome extension that enhances your chess experience on Lichess by allowing you to extract and analyze positions directly from the analysis board. The extension provides tactical, positional, material, and strategic analyses using a server-side engine, LLMs, and Stockfish online.
@@ -22,16 +20,19 @@
 ### Popup Interface
 
 ![Popup Interface](images/image.png)
+
 *Displays the extension's interface where users can extract FEN and PGN, and perform various types of analysis.*
 
 ### Extracting FEN & PGN
 
 ![Extracting FEN & PGN](images/get-fen.gif)
+
 *After clicking "Get Position," the FEN and PGN strings are displayed, allowing for further analysis.*
 
 ### Performing Tactical Analysis
 
 ![Performing Tactical Analysis](images/analysis.gif)
+
 *The extension provides a detailed tactical analysis based on the current chess position using Stockfish online.*
 
 ## Setup and Installation
